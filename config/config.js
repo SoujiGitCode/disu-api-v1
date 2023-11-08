@@ -11,7 +11,7 @@ module.exports = {
         logging: false, // Set to console.log to see the raw SQL queries
         define: {
             timestamps: true,
-            underscored: true,
+            underscored: false,
         },
 
     },
