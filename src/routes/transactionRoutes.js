@@ -4,8 +4,27 @@ const multer = require('multer');
 const upload = multer();
 const router = express.Router();
 
+
+// GET todas las transacciones
+router.get('/', async (req, res) => {
+    try {
+        const transactions = await Transaction.findAll();
+        return res.status(200).json({
+            status: 'success',
+            message: 'Todas las transacciones obtenidas con éxito.',
+            data: transactions
+        });
+    } catch (error) {
+        console.error('Error al obtener las transacciones:', error);
+        return res.status(500).json({
+            status: 'error',
+            message: 'Error interno del servidor.'
+        });
+    }
+});
+
 // POST para crear una nueva transacción
-router.post('/', upload.none(), async (req, res) => {
+router.post('/create', upload.none(), async (req, res) => {
     try {
         // Extrae los datos del cuerpo de la solicitud
         const { user_id, shop_id, init_amount, discount, final_amount } = req.body;

@@ -7,7 +7,7 @@ const api = express.Router();
 
 api.use('/users', userRoutes);
 api.use('/shops', shopRoutes);
-api.use('/transactions/create', transactionRoutes);
+api.use('/transactions', transactionRoutes);
 
 api.get('/', (req, res) => {
     res.send('GET request to the homepage')

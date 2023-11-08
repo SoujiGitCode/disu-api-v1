@@ -2,6 +2,25 @@ const express = require('express');
 const { Shop } = require('../../models/index'); // Asegúrate de que la ruta sea la correcta
 const router = express.Router();
 
+
+// GET todas las tiendas
+router.get('/', async (req, res) => {
+    try {
+        const shops = await Shop.findAll();
+        return res.status(200).json({
+            status: 'success',
+            message: 'Todas las tiendas obtenidas con éxito.',
+            data: shops
+        });
+    } catch (error) {
+        console.error('Error al obtener las tiendas:', error);
+        return res.status(500).json({
+            status: 'error',
+            message: 'Error interno del servidor.'
+        });
+    }
+});
+
 // GET shop by ID
 router.get('/:id', async (req, res) => {
     try {
