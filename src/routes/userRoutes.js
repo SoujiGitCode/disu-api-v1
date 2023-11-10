@@ -90,7 +90,7 @@ router.delete('/delete/:id', async (req, res) => {
 });
 
 // PUT - Actualizar un usuario por ID
-router.put('update/:id', async (req, res) => {
+router.put('/update/:id', upload.none(), async (req, res) => {
     try {
         const userId = parseInt(req.params.id, 10);
         if (isNaN(userId)) {
@@ -100,23 +100,33 @@ router.put('update/:id', async (req, res) => {
             });
         }
 
-        const user = await User.findByPk(userId);
-        if (!user) {
-            return res.status(404).json({
+        // Filtrar campos vacíos
+        const fieldsToUpdate = Object.fromEntries(
+            Object.entries(req.body)
+                .filter(([_, value]) => value.trim() !== '')
+        );
+
+        if (Object.keys(fieldsToUpdate).length === 0) {
+            return res.status(400).json({
                 status: 'failed',
-                message: 'Usuario no encontrado.'
+                message: 'No hay campos para actualizar.'
             });
         }
 
-        // Actualizar solo los campos que se han enviado en la solicitud
-        const updatedFields = req.body;
-        await user.update(updatedFields);
+        const [updateCount] = await User.update(fieldsToUpdate, { where: { id: userId } });
 
-        // Enviar respuesta con el usuario actualizado
+        if (updateCount === 0) {
+            return res.status(404).json({
+                status: 'failed',
+                message: 'Usuario no encontrado o no se requiere actualización.'
+            });
+        }
+
+        const updatedUser = await User.findByPk(userId);
         return res.status(200).json({
             status: 'success',
             message: 'Usuario actualizado con éxito.',
-            data: user
+            data: updatedUser
         });
 
     } catch (error) {
@@ -127,7 +137,6 @@ router.put('update/:id', async (req, res) => {
         });
     }
 });
-
 
 // GET every user registered
 

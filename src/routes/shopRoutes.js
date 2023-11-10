@@ -54,7 +54,7 @@ router.post('/create', upload.none(), async (req, res) => {
 });
 
 // DELETE - Eliminar un Comercio por ID
-router.delete('delete/:id', async (req, res) => {
+router.delete('/delete/:id', async (req, res) => {
     try {
         const shopId = parseInt(req.params.id, 10);
         if (isNaN(shopId)) {
@@ -93,45 +93,54 @@ router.delete('delete/:id', async (req, res) => {
 
 // ... (código anterior)
 
-// PUT - Actualizar un usuario por ID
-router.put('update/:id', async (req, res) => {
+// PUT - Actualizar un comercio por ID
+router.put('/update/:id', upload.none(), async (req, res) => {
     try {
         const shopId = parseInt(req.params.id, 10);
         if (isNaN(shopId)) {
             return res.status(400).json({
                 status: 'failed',
-                message: 'El ID del usuario debe ser un número válido.'
+                message: 'El ID del comercio debe ser un número válido.'
             });
         }
 
-        const shop = await User.findByPk(shopId);
-        if (!shop) {
+        // Filtrar campos vacíos
+        const fieldsToUpdate = Object.fromEntries(
+            Object.entries(req.body)
+                .filter(([_, value]) => value.trim() !== '')
+        );
+
+        if (Object.keys(fieldsToUpdate).length === 0) {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'No hay campos para actualizar.'
+            });
+        }
+
+        const [updateCount] = await Shop.update(fieldsToUpdate, { where: { id: shopId } });
+
+        if (updateCount === 0) {
             return res.status(404).json({
                 status: 'failed',
-                message: 'Usuario no encontrado.'
+                message: 'Comercio  no encontrado o no se requiere actualización.'
             });
         }
 
-        // Actualizar solo los campos que se han enviado en la solicitud
-        const updatedFields = req.body;
-        await Shop.update(updatedFields);
-
-        // Enviar respuesta con el usuario actualizado
+        const updatedShop = await Shop.findByPk(shopId);
         return res.status(200).json({
             status: 'success',
-            message: 'Usuario actualizado con éxito.',
-            data: user
+            message: 'Comercio  actualizado con éxito.',
+            data: updatedShop
         });
 
     } catch (error) {
-        console.error('Error al actualizar el usuario:', error);
+        console.error('Error al actualizar el comercio:', error);
         return res.status(500).json({
             status: 'error',
             message: 'Error interno del servidor.'
         });
     }
 });
-
 
 // GET todas las tiendas
 router.get('/', async (req, res) => {
