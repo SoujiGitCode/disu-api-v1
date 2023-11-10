@@ -4,9 +4,7 @@ const router = express.Router();
 const multer = require('multer');
 const upload = multer();
 
-
-
-// POST - Crear un nuevo usuario
+// POST - Crear un nuevo Comercio
 router.post('/create', upload.none(), async (req, res) => {
     try {
         // Definir los campos requeridos
@@ -29,11 +27,9 @@ router.post('/create', upload.none(), async (req, res) => {
         }
 
         // Crear el nuevo usuario con los datos validados
-        const newUser = await User.create({
+        const newShop = await Shop.create({
             username: req.body.username,
-            name: req.body.name,
-            last_name: req.body.last_name,
-            dni: req.body.dni,
+            shop_name: req.body.shop_name,
             email: req.body.email,
             status: req.body.status,
         });
@@ -42,7 +38,7 @@ router.post('/create', upload.none(), async (req, res) => {
         return res.status(201).json({
             status: 'success',
             message: 'Comercio creado con éxito.',
-            data: newUser
+            data: newShop
         });
     } catch (error) {
         console.error('Error al crear el comercio:', error);
@@ -89,9 +85,6 @@ router.delete('/delete/:id', async (req, res) => {
         });
     }
 });
-
-
-// ... (código anterior)
 
 // PUT - Actualizar un comercio por ID
 router.put('/update/:id', upload.none(), async (req, res) => {
