@@ -6,7 +6,7 @@ module.exports = {
     await queryInterface.bulkInsert('shops', [
       {
         username: 'BurgerKing',
-        name: 'Burger King',
+        shop_name: 'Burger King',
         email: 'bk@shops.com',
         status: 'active',
         createdAt: new Date(),
@@ -14,7 +14,7 @@ module.exports = {
       },
       {
         username: 'MCDonalds',
-        name: 'McDonalds',
+        shop_name: 'McDonalds',
         email: 'mcdonalds@shops.com',
         status: 'active',
         createdAt: new Date(),
@@ -22,7 +22,7 @@ module.exports = {
       },
       {
         username: 'KFCuserName',
-        name: 'KFC',
+        shop_name: 'KFC',
         email: 'kfc@shops.com',
         status: 'active',
         createdAt: new Date(),
