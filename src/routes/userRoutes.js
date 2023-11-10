@@ -3,7 +3,7 @@ const { User } = require('../../models/index');
 const multer = require('multer');
 const upload = multer();
 const router = express.Router();
-
+const { SequelizeUniqueConstraintError } = require('sequelize/lib/errors');
 
 // POST - Crear un nuevo usuario
 router.post('/create', upload.none(), async (req, res) => {
@@ -45,6 +45,16 @@ router.post('/create', upload.none(), async (req, res) => {
         });
     } catch (error) {
         console.error('Error al crear el usuario:', error);
+
+        // Manejo de errores de restricción única
+        if (error instanceof SequelizeUniqueConstraintError) {
+            const duplicatedField = error.fields;
+            return res.status(400).json({
+                status: 'failed',
+                message: `El valor proporcionado para el campo '${Object.keys(duplicatedField)}' ya está en uso.`
+            });
+        }
+
         return res.status(500).json({
             status: 'error',
             message: 'Error interno del servidor.'
