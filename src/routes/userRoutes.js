@@ -44,16 +44,17 @@ router.post('/create', upload.none(), async (req, res) => {
             data: newUser
         });
     } catch (error) {
-        console.error('Error al crear el usuario:', error);
-
         // Manejo de errores de restricción única
-        if (error instanceof SequelizeUniqueConstraintError) {
-            const duplicatedField = error.fields;
+        if (error.name === 'SequelizeUniqueConstraintError') {
+            const duplicatedField = Object.keys(error.fields)[0]; // Esto debería darte el campo que causó el error
             return res.status(400).json({
                 status: 'failed',
-                message: `El valor proporcionado para el campo '${Object.keys(duplicatedField)}' ya está en uso.`
+                message: `El valor proporcionado para el campo '${duplicatedField}' ya está en uso.`
             });
         }
+
+
+        console.error('Error al crear el usuario:', error);
 
         return res.status(500).json({
             status: 'error',
