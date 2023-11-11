@@ -1,8 +1,18 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const api = require('./routes');
+const cors = require('cors');
+
 
 const app = express();
+
+// Configuración de Cors
+app.use(cors({
+    origin: '*'
+    // origin: ' https://disu.app/'
+}));
+
+
 
 // Configuración de middlewares
 app.use(bodyParser.json());
