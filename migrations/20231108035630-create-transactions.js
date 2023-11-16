@@ -34,10 +34,6 @@ module.exports = {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: false
       },
-      discount: {
-        type: Sequelize.DECIMAL(10, 2),
-        allowNull: false
-      },
       final_amount: {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: false

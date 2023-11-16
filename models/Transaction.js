@@ -9,14 +9,10 @@ module.exports = (sequelize) => {
             type: DataTypes.DECIMAL(10, 2),
             allowNull: false
         },
-        discount: {
-            type: DataTypes.DECIMAL(10, 2),
-            allowNull: false
-        },
         final_amount: {
             type: DataTypes.DECIMAL(10, 2),
             allowNull: false
-        },
+        }
     }, {
         sequelize,
         modelName: 'Transaction',
@@ -26,18 +22,15 @@ module.exports = (sequelize) => {
     });
 
     Transaction.associate = function (models) {
-        // asocia Transaction con User
         Transaction.belongsTo(models.User, {
             foreignKey: 'user_id',
             as: 'user'
         });
-        // asocia Transaction con Shop
         Transaction.belongsTo(models.Shop, {
             foreignKey: 'shop_id',
             as: 'shop'
         });
     };
-
 
     return Transaction;
 };

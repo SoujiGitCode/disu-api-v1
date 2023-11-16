@@ -9,6 +9,7 @@ module.exports = {
         shop_name: 'Burger King',
         email: 'bk@shops.com',
         status: 'active',
+        discount: '10',
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -17,6 +18,7 @@ module.exports = {
         shop_name: 'McDonalds',
         email: 'mcdonalds@shops.com',
         status: 'active',
+        discount: '20',
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -25,6 +27,7 @@ module.exports = {
         shop_name: 'KFC',
         email: 'kfc@shops.com',
         status: 'active',
+        discount: '30',
         createdAt: new Date(),
         updatedAt: new Date()
       },

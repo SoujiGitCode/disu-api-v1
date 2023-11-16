@@ -8,7 +8,13 @@ const router = express.Router();
 // GET todas las transacciones
 router.get('/', async (req, res) => {
     try {
-        const transactions = await Transaction.findAll();
+        const transactions = await Transaction.findAll({
+            include: [{
+                model: Shop,
+                as: 'shop',
+                attributes: ['discount']
+            }]
+        });
         return res.status(200).json({
             status: 'success',
             message: 'Todas las transacciones obtenidas con éxito.',
@@ -27,10 +33,10 @@ router.get('/', async (req, res) => {
 router.post('/create', upload.none(), async (req, res) => {
     try {
         // Extrae los datos del cuerpo de la solicitud
-        const { user_id, shop_id, init_amount, discount, final_amount } = req.body;
+        const { user_id, shop_id, init_amount, final_amount } = req.body;
 
         // Verifica que todos los campos necesarios estén presentes y no estén vacíos
-        const requiredFields = ['user_id', 'shop_id', 'init_amount', 'discount', 'final_amount'];
+        const requiredFields = ['user_id', 'shop_id', 'init_amount', 'final_amount'];
         for (let field of requiredFields) {
             if (!req.body[field]) {
                 return res.status(400).json({
@@ -62,7 +68,6 @@ router.post('/create', upload.none(), async (req, res) => {
             user_id,
             shop_id,
             init_amount,
-            discount,
             final_amount
         });
 

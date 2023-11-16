@@ -14,6 +14,11 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false
         },
+        discount: {
+            type: DataTypes.DECIMAL(10, 2),
+            allowNull: false,
+            defaultValue: 10.00
+        },
         email: {
             type: DataTypes.STRING,
             allowNull: false,

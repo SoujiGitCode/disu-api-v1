@@ -18,6 +18,11 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      discount: {
+        type: Sequelize.DECIMAL(10, 2), // Cambiado a DECIMAL
+        allowNull: false,
+        defaultValue: '5'
+      },
       email: {
         type: Sequelize.STRING,
         allowNull: false,
