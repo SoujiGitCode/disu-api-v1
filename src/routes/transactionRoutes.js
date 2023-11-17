@@ -15,10 +15,21 @@ router.get('/', async (req, res) => {
                 attributes: ['discount']
             }]
         });
+
+        // Modificar cada transacción para incluir el descuento fuera del objeto 'shop'
+        const modifiedTransactions = transactions.map(transaction => {
+            const transactionData = transaction.get({ plain: true });
+            if (transactionData.shop && transactionData.shop.discount) {
+                transactionData.discount = transactionData.shop.discount;
+            }
+            delete transactionData.shop;
+            return transactionData;
+        });
+
         return res.status(200).json({
             status: 'success',
             message: 'Todas las transacciones obtenidas con éxito.',
-            data: transactions
+            data: modifiedTransactions
         });
     } catch (error) {
         console.error('Error al obtener las transacciones:', error);
@@ -28,6 +39,7 @@ router.get('/', async (req, res) => {
         });
     }
 });
+
 
 // POST para crear una nueva transacción
 router.post('/create', upload.none(), async (req, res) => {
