@@ -5,11 +5,11 @@ const multer = require('multer');
 const upload = multer();
 const { SequelizeUniqueConstraintError } = require('sequelize');
 
-// POST - Crear un nuevo Comercio
+/// POST - Crear un nuevo Comercio
 router.post('/create', upload.none(), async (req, res) => {
     try {
         // Definir los campos requeridos
-        const requiredFields = ['username', 'shop_name', 'email'];
+        const requiredFields = ['username', 'shop_name', 'email', 'discount'];
         let missingFields = [];
 
         // Verificar que cada campo requerido esté presente y no sea vacío
@@ -27,37 +27,22 @@ router.post('/create', upload.none(), async (req, res) => {
             });
         }
 
-        // Crear el nuevo usuario con los datos validados
+        // Crear el nuevo comercio con los datos validados
         const newShop = await Shop.create({
             username: req.body.username,
             shop_name: req.body.shop_name,
             email: req.body.email,
+            discount: req.body.discount,
             status: req.body.status,
         });
 
-        // Retornar la respuesta exitosa con el usuario creado
+        // Retornar la respuesta exitosa con el comercio creado
         return res.status(201).json({
             status: 'success',
             message: 'Comercio creado con éxito.',
             data: newShop
         });
     } catch (error) {
-        // Manejo de errores de restricción única
-        if (error.name === 'SequelizeUniqueConstraintError') {
-            const duplicatedField = Object.keys(error.fields)[0]; // Esto debería darte el campo que causó el error
-            return res.status(400).json({
-                status: 'failed',
-                message: `El valor proporcionado para el campo '${duplicatedField}' ya está en uso.`
-            });
-        }
-
-        console.error('Error al crear el comercio:', error);
-
-
-        return res.status(500).json({
-            status: 'error',
-            message: 'Error interno del servidor.'
-        });
     }
 });
 
