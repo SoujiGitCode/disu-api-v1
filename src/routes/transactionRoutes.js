@@ -9,20 +9,16 @@ const router = express.Router();
 router.get('/', async (req, res) => {
     try {
         const transactions = await Transaction.findAll({
-            include: [{
-                model: Shop,
-                as: 'shop',
-                attributes: ['discount']
-            }]
+            // include: [{
+            //     model: Shop,
+            //     as: 'shop',
+            //     attributes: ['discount']
+            // }]
         });
 
         // Modificar cada transacción para incluir el descuento fuera del objeto 'shop'
         const modifiedTransactions = transactions.map(transaction => {
             const transactionData = transaction.get({ plain: true });
-            if (transactionData.shop && transactionData.shop.discount) {
-                transactionData.discount = transactionData.shop.discount;
-            }
-            delete transactionData.shop;
             return transactionData;
         });
 
@@ -45,10 +41,10 @@ router.get('/', async (req, res) => {
 router.post('/create', upload.none(), async (req, res) => {
     try {
         // Extrae los datos del cuerpo de la solicitud
-        const { user_id, shop_id, init_amount, final_amount } = req.body;
+        const { user_id, shop_id, init_amount, final_amount, discount } = req.body;
 
         // Verifica que todos los campos necesarios estén presentes y no estén vacíos
-        const requiredFields = ['user_id', 'shop_id', 'init_amount', 'final_amount'];
+        const requiredFields = ['user_id', 'shop_id', 'init_amount', 'final_amount', 'discount'];
         for (let field of requiredFields) {
             if (!req.body[field]) {
                 return res.status(400).json({
@@ -79,6 +75,7 @@ router.post('/create', upload.none(), async (req, res) => {
         const transaction = await Transaction.create({
             user_id,
             shop_id,
+            discount,
             init_amount,
             final_amount
         });

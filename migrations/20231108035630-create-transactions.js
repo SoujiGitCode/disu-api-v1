@@ -17,7 +17,7 @@ module.exports = {
           key: 'id'
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE' // Cambia SET NULL por CASCADE
+        onDelete: 'CASCADE'
       },
       shop_id: {
         type: Sequelize.INTEGER,
@@ -27,7 +27,7 @@ module.exports = {
           key: 'id'
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE' // Cambia SET NULL por CASCADE
+        onDelete: 'CASCADE'
       },
 
       init_amount: {
@@ -35,6 +35,10 @@ module.exports = {
         allowNull: false
       },
       final_amount: {
+        type: Sequelize.DECIMAL(10, 2),
+        allowNull: false
+      },
+      discount: {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: false
       },
