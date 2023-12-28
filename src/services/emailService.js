@@ -5,7 +5,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 function sendWelcomeEmail(newUser) {
     const msg = {
-        to: newUser.mail,
+        to: newUser.email,
         // to: 'juan.mejias.ar@gmail.com',
         // to: 'dev.reinaldo.cardenas@gmail.com',
         from: 'info@disu.app', // Tu dirección de correo verificada
