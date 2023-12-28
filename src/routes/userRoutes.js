@@ -4,8 +4,14 @@ const multer = require('multer');
 const upload = multer();
 const router = express.Router();
 const { SequelizeUniqueConstraintError } = require('sequelize/lib/errors');
+const axios = require('axios');
+require('dotenv').config();
+const emailService = require('../services/emailService');
 
-// POST - Crear un nuevo usuario
+
+
+console.log(process.env.SENDGRID_API_KEY)
+
 router.post('/create', upload.none(), async (req, res) => {
     try {
         // Definir los campos requeridos
@@ -36,6 +42,33 @@ router.post('/create', upload.none(), async (req, res) => {
             email: req.body.email,
             status: req.body.status,
         });
+
+        // Sendgrid Dinamyc template
+        try {
+            await emailService.sendWelcomeEmail(newUser);
+            console.log('Correo de bienvenida enviado a:', newUser.email);
+        } catch (error) {
+            console.error('Error al enviar correo de bienvenida:', error);
+        }
+
+        // First Sendgid Sent to verify Api key
+        // const sgMail = require('@sendgrid/mail')
+        // sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+        // const msg = {
+        //     to: newUser.email, // Change to your recipient
+        //     from: 'info@disu.app', // Change to your verified sender
+        //     subject: 'Sending with SendGrid is Fun',
+        //     text: 'and easy to do anywhere, even with Node.js',
+        //     html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+        // }
+        // sgMail
+        //     .send(msg)
+        //     .then(() => {
+        //         console.log('Email sent')
+        //     })
+        //     .catch((error) => {
+        //         console.error(error)
+        //     })
 
         // Retornar la respuesta exitosa con el usuario creado
         return res.status(201).json({
