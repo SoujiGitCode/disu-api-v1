@@ -47,9 +47,16 @@ router.post('/create', upload.none(), async (req, res) => {
         try {
             await emailService.sendWelcomeEmail(newUser);
             console.log('Correo de bienvenida enviado a:', newUser.email);
+
+            // Espera de 95 segundos antes de enviar el siguiente correo
+            await sleep(95000);
+
+            await emailService.sendQRCodeEmail(newUser);
+            console.log('Correo con código QR enviado a:', newUser.email);
         } catch (error) {
-            console.error('Error al enviar correo de bienvenida:', error);
+            console.error('Error al enviar correo electrónico:', error.message);
         }
+
 
         // First Sendgid Sent to verify Api key
         // const sgMail = require('@sendgrid/mail')
