@@ -11,6 +11,9 @@ const emailService = require('../services/emailService');
 
 
 console.log(process.env.SENDGRID_API_KEY)
+// function sleep(ms) {
+//     return new Promise(resolve => setTimeout(resolve, ms));
+// }
 
 router.post('/create', upload.none(), async (req, res) => {
     try {
@@ -47,9 +50,6 @@ router.post('/create', upload.none(), async (req, res) => {
         try {
             await emailService.sendWelcomeEmail(newUser);
             console.log('Correo de bienvenida enviado a:', newUser.email);
-
-            // Espera de 95 segundos antes de enviar el siguiente correo
-            await sleep(95000);
 
             await emailService.sendQRCodeEmail(newUser);
             console.log('Correo con código QR enviado a:', newUser.email);

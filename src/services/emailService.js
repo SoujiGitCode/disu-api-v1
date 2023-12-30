@@ -34,9 +34,9 @@ function sendQRCodeEmail(newUser) {
     const customQRCode = `https://disu.app/qr/?id=${newUser?.id || 'invalid'}`;
 
     const msg = {
-        // to: newUser.email,
+        to: newUser.email,
         // to: 'juan.mejias.ar@gmail.com',
-        to: 'dev.reinaldo.cardenas@gmail.com',
+        // to: 'dev.reinaldo.cardenas@gmail.com',
         from: 'info@disu.app', // Tu dirección de correo verificada
         templateId: 'd-2aef2dd947e94a9eaa422595dc22d240', // ID del template dinámico
         // Puedes agregar campos dinámicos aquí si los agregas al template más adelante
