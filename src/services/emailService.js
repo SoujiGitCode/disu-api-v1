@@ -4,7 +4,8 @@ require('dotenv').config();
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 function sendWelcomeEmail(newUser) {
-
+    console.log(typeof (newUser.email))
+    console.log(newUser.email)
     const parsedName = newUser.name.charAt(0).toUpperCase() + newUser.name.slice(1);
     const msg = {
         to: newUser.email,
@@ -29,9 +30,10 @@ function sendWelcomeEmail(newUser) {
 
 
 function sendQRCodeEmail(newUser) {
-
+    console.log(typeof (newUser.email))
     const parsedName = newUser.name.charAt(0).toUpperCase() + newUser.name.slice(1);
     const customQRCode = `https://disu.app/qr/?id=${newUser?.id || 'invalid'}`;
+    console.log(customQRCode)
 
     const msg = {
         to: newUser.email,

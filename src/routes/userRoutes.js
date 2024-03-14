@@ -211,6 +211,48 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Verificar si un usuario existe por correo electrónico
+router.get('/registered', async (req, res) => {
+    const { email } = req.query;
+
+    // Asegurarse de que se proporcionó un correo electrónico
+    if (!email) {
+        return res.status(400).json({
+            status: 'failed',
+            message: 'El correo electrónico es requerido.'
+        });
+    }
+
+    try {
+        // Buscar al usuario por su correo electrónico
+        const user = await User.findOne({ where: { email } });
+
+        // Si el usuario existe, devolver información relevante, de lo contrario indicar que no existe
+        if (user) {
+            return res.status(200).json({
+                status: 'success',
+                message: 'El usuario existe y está registrado en DISU.',
+                exists: true
+            });
+        } else {
+            return res.status(404).json({
+                status: 'failed',
+                message: 'El usuario no existe.',
+                exists: false
+            });
+        }
+    } catch (error) {
+        console.error('Error al verificar la existencia del usuario:', error);
+        return res.status(500).json({
+            status: 'error',
+            message: 'Error interno del servidor.'
+        });
+    }
+});
+
+
+
+
 // GET user by ID
 router.get('/:id', async (req, res) => {
     try {
@@ -245,5 +287,8 @@ router.get('/:id', async (req, res) => {
         });
     }
 });
+
+
+
 
 module.exports = router;
