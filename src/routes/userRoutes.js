@@ -232,6 +232,7 @@ router.get('/registered', async (req, res) => {
             return res.status(200).json({
                 status: 'success',
                 message: 'El usuario existe y está registrado en DISU.',
+                id: user.id,
                 exists: true
             });
         } else {
